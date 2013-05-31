@@ -1,9 +1,8 @@
 module Main (main) where
 
-import Test.Framework (Test, defaultMain, testGroup)
-import Test.Framework.Providers.HUnit (testCase)
+import Test.Hspec (Spec, describe, it)
 import Test.HUnit (assertBool)
-
+import Test.Hspec.Runner (hspecWith , defaultConfig, Config(..), configAddFilter)
 import qualified BasicFunctions
 import qualified Lists
 import qualified Currification
@@ -11,13 +10,11 @@ import qualified BasicIO
 import qualified ParserCombinators
 
 main :: IO ()
-main = defaultMain tests
-  where
-    tests = 
-      [
-        testGroup "BasicFunctions" BasicFunctions.koans
-      , testGroup "Lists" Lists.koans
-      , testGroup "Currification" Currification.tests
-      , testGroup "BasicIO" BasicIO.tests
-      , testGroup "ParserCombinators" ParserCombinators.tests
-      ]
+main = do
+  hspecWith (configAddFilter $ defaultConfig { configFastFail = True }) $ do
+    BasicFunctions.koans
+    Lists.koans
+    Currification.tests
+    BasicIO.tests
+    ParserCombinators.tests
+  return ()
